@@ -43,3 +43,12 @@ $('#bookingRestart').addEventListener('click',()=>{wizard.hidden=false;$('#booki
 }
 $('#contactForm')?.addEventListener('submit',e=>{e.preventDefault();$('#contactStatus').textContent='فرم بررسی شد؛ این نسخه نمایشی است و پیامی ارسال یا ذخیره نشده است.'});
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('motion-visible');observer.unobserve(e.target)}}),{threshold:.05});$$('main>.section').forEach(x=>observer.observe(x))}
+// Dedicated drawer controls and accessible mobile footer groups.
+const drawerClose=$('.mobile-nav-close');
+drawerClose?.addEventListener('click',()=>{setMenu(false);menuToggle.focus()});
+menuToggle.addEventListener('click',()=>{if(nav.classList.contains('mobile-open'))drawerClose?.focus()});
+document.addEventListener('keydown',e=>{if(e.key!=='Tab'||!nav.classList.contains('mobile-open'))return;const nodes=$$('a,button,input,select',nav).filter(x=>!x.disabled&&x.getClientRects().length);if(!nodes.length)return;const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
+const footerMedia=matchMedia('(max-width:700px)'),footerGroups=$$('.footer-group');
+function setFooterMode(){footerGroups.forEach((g,i)=>{const button=$('.footer-toggle',g),panel=$('.footer-links',g);panel.hidden=footerMedia.matches&&i!==0;button.setAttribute('aria-expanded',String(!panel.hidden))})}
+footerGroups.forEach(g=>$('.footer-toggle',g).addEventListener('click',()=>{if(!footerMedia.matches)return;const p=$('.footer-links',g);p.hidden=!p.hidden;$('.footer-toggle',g).setAttribute('aria-expanded',String(!p.hidden))}));
+footerMedia.addEventListener('change',setFooterMode);setFooterMode();
