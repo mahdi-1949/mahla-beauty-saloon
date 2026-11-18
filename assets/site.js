@@ -52,3 +52,5 @@ const footerMedia=matchMedia('(max-width:700px)'),footerGroups=$$('.footer-group
 function setFooterMode(){footerGroups.forEach((g,i)=>{const button=$('.footer-toggle',g),panel=$('.footer-links',g);panel.hidden=footerMedia.matches&&i!==0;button.setAttribute('aria-expanded',String(!panel.hidden))})}
 footerGroups.forEach(g=>$('.footer-toggle',g).addEventListener('click',()=>{if(!footerMedia.matches)return;const p=$('.footer-links',g);p.hidden=!p.hidden;$('.footer-toggle',g).setAttribute('aria-expanded',String(!p.hidden))}));
 footerMedia.addEventListener('change',setFooterMode);setFooterMode();
+
+function updateHeaderDensity(){header.classList.toggle("compact",window.scrollY>100)}window.addEventListener("scroll",updateHeaderDensity,{passive:true});updateHeaderDensity();
